@@ -3,12 +3,9 @@
 <package format="3">
   <name>my_package</name>
   <version>0.0.0</version>
-  <description>Basic Ros2 package, base for assignemnt. </description>
+  <description>TODO: Package description</description>
   <maintainer email="student@socstech.support">lcas</maintainer>
   <license>Apache-2.0</license>
-
-  <depends>rclpy</depends>
-  <depends>geometru_msgs</depends>
 
   <test_depend>ament_copyright</test_depend>
   <test_depend>ament_flake8</test_depend>
