@@ -1,4 +1,4 @@
-import rclpy
+import rospy
 from rclpy.node import Node
 
 from std_msgs.msg import String
