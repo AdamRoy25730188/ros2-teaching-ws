@@ -1,11 +1,11 @@
 import rclpy
 from geometry_msgs.msg import Twist
 
-class Publisher:
+class moveNode:
 
     def __init__(self):
         super().__init__('move_node')
-        self.pub = rclpy.Publisher('/mobile_base/commands/velocity', Twist, queue_size=1)
+        self.pub = rclpy.Publisher(Twist, '/cmd/vel', 10)
 
     def run(self):
         while not rclpy.is_shutdown():
@@ -18,14 +18,9 @@ class Publisher:
 
 def main(args=None):
     rclpy.init(args=args)
-    node = Publisher()
+    node = moveNode()
     rclpy.spin(node)
     rclpy.shutdown()
 
-
-#myP = MyPublisher()
-#myP.run()
-#rospy.spin()
-
-#if __name__ == '__main__':
-#    main()
+if __name__ == '__main__':
+    main()
