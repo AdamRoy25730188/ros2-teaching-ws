@@ -3,6 +3,8 @@ from rclpy.node import Node
 #from rclpy import Node
 from geometry_msgs.msg import Twist
 
+#Main node
+
 class moveNode(Node):
 
     def __init__(self):
