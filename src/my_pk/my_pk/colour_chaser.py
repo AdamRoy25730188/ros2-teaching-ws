@@ -65,7 +65,7 @@ class ColourChaser(Node):
         if the space is clear, it moves forward.
         """
         #This had to be cut out due to getting stuck once contacting the box
-        ''' 
+        
         # first, identify the nearest obstacle in the right 45 degree segment of the laser scanner
         min_range_right = self.min_range(data.ranges[:self.scan_segment])
         min_range_left = self.min_range(data.ranges[-self.scan_segment:])
@@ -81,7 +81,6 @@ class ColourChaser(Node):
             twist.linear.x = self.forward_speed
 
         self.pub_cmd_vel.publish(twist)   
-        '''
 
     def camera_callback(self, data):
         #self.get_logger().info("camera_callback")
@@ -117,39 +116,39 @@ class ColourChaser(Node):
                     '''
                     following is unfinished attempt to usilise lidar
                     '''
-                    #start_index = max(0, -45)
-                    #end_index = min(360, 45)
+                    start_index = max(0, -45)
+                    end_index = min(360, 45)
 
-                    #xDistFromCentre = abs(400 - cx) / 400
+                    xDistFromCentre = abs(400 - cx) / 400
 
 
-                    #rayDepth = self.min_range(self.rays.ranges[start_index:end_index])
+                    rayDepth = self.min_range(self.rays.ranges[start_index:end_index])
 
-                    #if(rayDepth < cx):
-                    #    self.get_logger().warning("Wall is somehow in front of box!")
-                    #if(rayDepth - cx < 0.2 + xDistFromCentre/8): #xDistFromCentre to account for distortion
-                    #    self.get_logger().info(f'Box at {cx}, {cy} against wall')
-                    #    continue
-                #self.get_logger().info(f'Box at {cx}, {cy} to be pushed')
+                    if(rayDepth < cx):
+                        self.get_logger().warning("Wall is somehow in front of box!")
+                    if(rayDepth - cx < 0.2 + xDistFromCentre/8): #xDistFromCentre to account for distortion
+                        self.get_logger().info(f'Box at {cx}, {cy} against wall')
+                        continue
+                self.get_logger().info(f'Box at {cx}, {cy} to be pushed')
 
                 print("Centroid of the biggest area: ({}, {})".format(cx, cy))
 
                 if cy < 400:
 
-                    # Draw a circle centered at centroid coordinates
-                    # cv2.circle(image, center_coordinates, radius, color, thickness) -1 px will fill the circle
-                    cv2.circle(current_frame, (round(cx), round(cy)), 2, (0, 150, 0), -1)
+                    Draw a circle centered at centroid coordinates
+                    cv2.circle(image, center_coordinates, radius, color, thickness) -1 px will fill the circle
+                    v2.circle(current_frame, (round(cx), round(cy)), 2, (0, 150, 0), -1)
                             
-                    # find height/width of robot camera image from ros2 topic echo /camera/image_raw height: 1080 width: 1920
+                    find height/width of robot camera image from ros2 topic echo /camera/image_raw height: 1080 width: 1920
 
-                    # if center of object is to the left of image center move left
-                    if cx < data.width / 4:
-                        self.tw.angular.z=0.2
-                    # else if center of object is to the right of image center move right
-                    elif cx >= 2 * data.width / 4:
-                        self.tw.angular.z=-0.2
-                    else: # center of object is in a 100 px range in the center of the image so dont turn
-                        #print("object in the center of image")
+                    if center of object is to the left of image center move left
+                        if cx < data.width / 4:
+                            self.tw.angular.z=0.2
+                    else if center of object is to the right of image center move right
+                        elif cx >= 2 * data.width / 4:
+                            self.tw.angular.z=-0.2
+                    else: center of object is in a 100 px range in the center of the image so dont turn
+                        print("object in the center of image")
                         self.tw.angular.z=0.0
                         self.tw.linear.x=1.0
 
