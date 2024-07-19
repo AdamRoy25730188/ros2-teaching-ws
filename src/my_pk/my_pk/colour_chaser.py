@@ -139,7 +139,7 @@ class ColourChaser(Node):
                 if cy < 400:
 
                     # Draw a circle centered at centroid coordinates
-                    cv2.circle(image, center_coordinates, radius, color, thickness) -1 #px will fill the circle
+                    #cv2.circle(image, center_coordinates, radius, color, thickness) -1 px will fill the circle
                     v2.circle(current_frame, (round(cx), round(cy)), 2, (0, 150, 0), -1)
                             
                     # find height/width of robot camera image from ros2 topic echo /camera/image_raw height: 1080 width: 1920
