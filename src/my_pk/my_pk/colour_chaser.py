@@ -22,7 +22,7 @@ class ColourChaser(Node):
     rays = None
     min_distance = 1.0  # stay at least 30cm away from obstacles
     turn_speed = 0.2    # rad/s, turning speed in case of obstacle
-    forward_speed = 0.3 # m/s, speed with which to go forward if the space is clear
+    forward_speed = 0.2 # m/s, speed with which to go forward if the space is clear
     scan_segment = 60   # degrees, the size of the left and right laser segment to search for obstacles
 
     #initialise class
