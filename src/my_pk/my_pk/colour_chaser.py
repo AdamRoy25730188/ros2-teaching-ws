@@ -22,7 +22,7 @@ class ColourChaser(Node):
     rays = None
     min_distance = 1.0  # stay at least 30cm away from obstacles
     turn_speed = 0.2    # rad/s, turning speed in case of obstacle
-    forward_speed = 0.2 # m/s, speed with which to go forward if the space is clear
+    forward_speed = 0.3 # m/s, speed with which to go forward if the space is clear
     scan_segment = 60   # degrees, the size of the left and right laser segment to search for obstacles
 
     #initialise class
@@ -65,7 +65,7 @@ class ColourChaser(Node):
         if the space is clear, it moves forward.
         """
         #This had to be cut out due to getting stuck once contacting the box
-        
+        '''
         # first, identify the nearest obstacle in the right 45 degree segment of the laser scanner
         min_range_right = self.min_range(data.ranges[:self.scan_segment])
         min_range_left = self.min_range(data.ranges[-self.scan_segment:])
@@ -81,6 +81,7 @@ class ColourChaser(Node):
             twist.linear.x = self.forward_speed
 
         self.pub_cmd_vel.publish(twist)   
+        '''
 
     def camera_callback(self, data):
         #self.get_logger().info("camera_callback")
@@ -116,6 +117,7 @@ class ColourChaser(Node):
                     '''
                     following is unfinished attempt to usilise lidar
                     '''
+                    '''
                     start_index = max(0, -45)
                     end_index = min(360, 45)
 
@@ -130,6 +132,7 @@ class ColourChaser(Node):
                         self.get_logger().info(f'Box at {cx}, {cy} against wall')
                         continue
                 self.get_logger().info(f'Box at {cx}, {cy} to be pushed')
+                '''
 
                 print("Centroid of the biggest area: ({}, {})".format(cx, cy))
 
