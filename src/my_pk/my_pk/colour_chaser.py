@@ -165,11 +165,7 @@ class ColourChaser(Node):
         else:
             print("entering idle")
             #turn until we can see a coloured objet
-            self.tw.angular.z=-0.3
-            self.tw.linear.x=-0.1
-
-
-
+            self.tw.angular.z=-0.2
 
         self.pub_cmd_vel.publish(self.tw)
 
