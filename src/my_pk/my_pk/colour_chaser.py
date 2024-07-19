@@ -136,7 +136,7 @@ class ColourChaser(Node):
 
                 print("Centroid of the biggest area: ({}, {})".format(cx, cy))
 
-                if cy < 400:
+                if cy < 300:
 
                     # Draw a circle centered at centroid coordinates
                     #cv2.circle(image, center_coordinates, radius, color, thickness) -1 px will fill the circle
