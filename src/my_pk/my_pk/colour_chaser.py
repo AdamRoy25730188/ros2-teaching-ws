@@ -93,8 +93,11 @@ class ColourChaser(Node):
         # Convert image to HSV
         current_frame_hsv = cv2.cvtColor(current_frame, cv2.COLOR_BGR2HSV)
         # Create mask for range of colours (HSV low values, HSV high values)
-        #current_frame_mask = cv2.inRange(current_frame_hsv,(70, 0, 50), (150, 255, 255))
-        current_frame_mask = cv2.inRange(current_frame_hsv,(0, 150, 50), (255, 255, 255)) # orange
+        # any hue (range: 0-255), but for something brightly
+        # colours (high saturation: > 150)
+        current_frame_mask = cv2.inRange(current_frame_hsv, 
+                                         np.array((0, 150, 50)), 
+                                         np.array((255, 255, 255)))
 
         contours, hierarchy = cv2.findContours(current_frame_mask, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
 
