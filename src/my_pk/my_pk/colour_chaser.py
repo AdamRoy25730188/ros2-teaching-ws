@@ -139,25 +139,29 @@ class ColourChaser(Node):
 
                     print("Centroid of the biggest area: ({}, {})".format(cx, cy))
 
-                if cy < 250:
-
-                    # Draw a circle centered at centroid coordinates
-                    #cv2.circle(image, center_coordinates, radius, color, thickness) -1 px will fill the circle
-                    cv2.circle(current_frame, (round(cx), round(cy)), 2, (0, 150, 0), -1)
-                            
-                    # find height/width of robot camera image from ros2 topic echo /camera/image_raw height: 1080 width: 1920
-
-                    # if center of object is to the left of image center move left
-                    if cx < data.width / 4:
-                        self.tw.angular.z=0.2
-                    # else if center of object is to the right of image center move right
-                    elif cx >= 2 * data.width / 4:
+                    if cy < 250:
+    
+                        # Draw a circle centered at centroid coordinates
+                        #cv2.circle(image, center_coordinates, radius, color, thickness) -1 px will fill the circle
+                        cv2.circle(current_frame, (round(cx), round(cy)), 2, (0, 150, 0), -1)
+                                
+                        # find height/width of robot camera image from ros2 topic echo /camera/image_raw height: 1080 width: 1920
+    
+                        # if center of object is to the left of image center move left
+                        if cx < data.width / 4:
+                            self.tw.angular.z=0.2
+                        # else if center of object is to the right of image center move right
+                        elif cx >= 2 * data.width / 4:
+                            self.tw.angular.z=-0.2
+                        # else: center of object is in a 100 px range in the center of the image so dont turn
+                            print("object in the center of image")
+                            self.tw.angular.z=0.0
+                            self.tw.linear.x=1.0
+                     else:
+                        print("entering idle")
+                        # turn until we can see a coloured objet
                         self.tw.angular.z=-0.2
-                    # else: center of object is in a 100 px range in the center of the image so dont turn
-                        print("object in the center of image")
-                        self.tw.angular.z=0.0
-                        self.tw.linear.x=1.0
-
+                
                 else:
                     print("entering idle")
                     # turn until we can see a coloured objet
