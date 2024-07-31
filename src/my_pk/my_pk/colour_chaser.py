@@ -144,10 +144,10 @@ class ColourChaser(Node):
     
                     # if center of object is to the left of image center move left
                     if cx < data.width / 4:
-                        self.tw.angular.z=0.2
+                        self.tw.angular.z=0.1
                     # else if center of object is to the right of image center move right
                     elif cx >= 2 * data.width / 4:
-                        self.tw.angular.z=-0.2
+                        self.tw.angular.z=-0.1
                     # else: center of object is in a 100 px range in the center of the image so dont turn
                     else:    
                         print("object in the center of image")
