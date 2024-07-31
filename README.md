@@ -1,5 +1,5 @@
-# ros2-teaching-ws Adam Roy Assessment 1
-A template repository provided  for teaching robotics with ROS2 modified to complete CMP3103-2324 assessment item 1
+# ros2-teaching-ws
+A template repository for teaching robotics with ROS2
 
 ## Use case
 
@@ -7,36 +7,51 @@ You can use this repository to start developing your ROS2 modules. It provides a
 
 ## Usage
 
-This is a fork of the original repository template used to create your own independent repository.
+This is a repository template, ready for you to either *fork* it (being able to pull in changes that happen in this repository later, recommended) or *use this template* to create your own independent repository.
 
-### How to run the enviroment
+### Option 1: How to *fork* (recommended)
 
-In order to run the ros2 package and nodes within this repository, after loading it into visual studio using docker, the command:
+Go to https://github.com/LCAS/ros2-teaching-ws and click on 
 
-"pip install setuptools==58.2.0"
+![Fork](.assets/fork.png) 
 
-Should be used so that colcon may be properly used to build the package. This is done as the version of setuptools and colcon installed by default are depreciated and thus a downpatch to the most recent working version is required. Once done the package may be built using:
+to create a GitHub Fork in your own GitHub account. Then continue to [clone](https://docs.github.com/en/repositories/creating-and-managing-repositories/cloning-a-repository) this repository on your computer. Learn more about GitHub Forks [here](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/working-with-forks/fork-a-repo).
 
-"colcon build --packages-select my_pk"
+### Option 2: How to *use as template*
 
-While it is my understanding that there are other and better ways to initialise and build ros2 packages, this is the only method I have found that has worked successfuly. With the package built the enviroment needs to be initialised. First lcas must be logged into from a cmd terminal using:
+Go to https://github.com/LCAS/ros2-teaching-ws and click on 
 
-"docker login -u lcas -p lincoln lcas.lincoln.ac.uk"
+![usetemplate](.assets/usetemplate.png)
 
-Then the tidybot enviroment can be initialised in the novnc virtual enviroment. To do so return to the scr folder integrated terminal and enter:
+to create a new repository in your own GitHub account. Then continue to [clone](https://docs.github.com/en/repositories/creating-and-managing-repositories/cloning-a-repository) this repository on your computer. *Note: This repository is detached from the original one, so any changes in https://github.com/LCAS/ros2-teaching-ws happening after you created your own repository will have to be manually added.
 
-"ros2 launch uol_tidybot tidybot.launch.py"
 
-And spawn green boxes to be pusshed using the given command:
+### Setup your working environment
 
-"ros2 run  uol_tidybot generate_objects --ros-args -p n_objects:=10"
+1. Make sure you have VSCode installed: https://code.visualstudio.com/download
+2. Make sure you have the `Docker` and the `Dev Containers` extension in VSCode installed and working: https://code.visualstudio.com/docs/containers/overview and https://code.visualstudio.com/docs/devcontainers/containers
+    * ensure docker is working, i.e. try `docker run --rm hello-world` and check it succeeds for your user
+3. The docker image used to provide the Development Container is provided by the [L-CAS](https://lcas.lincoln.ac.uk) Container Registry. You must log in to use it. For simple read access, the username and password is public and is username `lcas`, password: `lincoln`. So, to log in do `docker login -u lcas -p lincoln lcas.lincoln.ac.uk` (you should only have to do this once, as the credentials should be cached unless your home directory is wiped).
 
-From there the main node/program "colour_chaser" needs to be ran. To do so open a new integrated terminal and use:
+### Open in VSCode
 
-"ros2 run my_pk colour_chaser"
+1. Open your own repository (*forked* or generated from this template) in VSCode: https://code.visualstudio.com/docs/sourcecontrol/intro-to-git (or any other way you prefer), e.g. click on "Clone Respository" in VSCode:
+    ![Alt text](.assets/clone.png)
 
-To begin the tidybot program. The opencv_bridge node can also be ran in order to get a perspective from the simulated limo bot:
+2. VSCode should prompt you that there is a devcontainer configured and ask if you want to reopen in container. Re-open in the container
 
-"ros2 launch my_pk opencv_bridge"
+### Access the embedded lite Desktop
+
+1. Click on the "Port" in VSCode, find the "novnc" port, right click on it to open the menu, and then choose either "Open in Browser" to open it outside of VSCode or "Preview in Editor" to have it open within VSCode:
+
+   <img width="735" alt="image" src="https://github.com/LCAS/ros2-teaching-ws/assets/1153084/2b0bdfa9-07ea-4238-a0b9-dd2dc8f4c111">
+
+2. (recommended) Set the dekstop scaling by clicking on the settings cog and choose scaling mode "Remote Resizing" if it's not set
+
+   <img width="292" alt="image" src="https://github.com/LCAS/ros2-teaching-ws/assets/1153084/2d9bc88e-7319-4723-968a-0aa08db026ef">
+
+3. click on "Connect" and enter the password `vscode` when prompted:
+
+   <img width="455" alt="image" src="https://github.com/LCAS/ros2-teaching-ws/assets/1153084/ddc224eb-5980-4d9a-994e-b05aa1e9fc1d">
 
 
