@@ -24,6 +24,8 @@ class ColourChaser(Node):
     turn_speed = 0.2    # rad/s, turning speed in case of obstacle
     forward_speed = 0.2 # m/s, speed with which to go forward if the space is clear
     scan_segment = 60   # degrees, the size of the left and right laser segment to search for obstacles
+    sanity = 0          # trackes how many times the bot has moved forward so that it may return (somewhat accurately) to its starting position
+    push = false        # used to make sure
 
     #initialise class
     def __init__(self):
@@ -89,12 +91,13 @@ class ColourChaser(Node):
         cv2.namedWindow("Image window", 1)
         
         # Convert ROS Image message to OpenCV image
-        frame = self.br.imgmsg_to_cv2(data, desired_encoding='bgr8')
+        # frame = self.br.imgmsg_to_cv2(data, desired_encoding='bgr8')
+        current_ frame = self.br.imgmsg_to_cv2(data, desired_encoding='bgr8')
 
         # crop image to prevent tracking wall objects, code sampled from 
         #https://stackoverflow.com/questions/65624795/how-to-ignore-a-image-region-for-contour-detection-opencv
-        margin = 150
-        current_frame = frame[margin:frame.shape[0], :]
+        # margin = 150
+        # current_frame = frame[margin:frame.shape[0], :]
         
         # Convert image to HSV
         current_frame_hsv = cv2.cvtColor(current_frame, cv2.COLOR_BGR2HSV)
@@ -142,7 +145,7 @@ class ColourChaser(Node):
                     else:    
                         print("object in the center of image")
                         self.tw.angular.z=0.0
-                        self.tw.linear.x=1.0
+                        self.tw.linear.x=0.5
                 
                 else:
                     print("entering idle")
