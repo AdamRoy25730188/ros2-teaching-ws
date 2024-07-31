@@ -96,7 +96,7 @@ class ColourChaser(Node):
         # any hue (range: 0-255), but for something brightly
         # colours (high saturation: > 150)
         current_frame_mask = cv2.inRange(current_frame_hsv, 
-                                         np.array((0, 150, 50)), 
+                                         np.array((0, 150, 0)), 
                                          np.array((255, 255, 255)))
 
         contours, hierarchy = cv2.findContours(current_frame_mask, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
@@ -120,7 +120,7 @@ class ColourChaser(Node):
                     
                     print("Centroid of the biggest area: ({}, {})".format(cx, cy))
 
-                    if cy < 150:
+                    if cy < 100:
     
                         # Draw a circle centered at centroid coordinates
                         #cv2.circle(image, center_coordinates, radius, color, thickness) -1 px will fill the circle
