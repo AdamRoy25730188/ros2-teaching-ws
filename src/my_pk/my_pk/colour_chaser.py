@@ -157,7 +157,7 @@ class ColourChaser(Node):
                             print("object in the center of image")
                             self.tw.angular.z=0.0
                             self.tw.linear.x=1.0
-                     else:
+                    else:
                         print("entering idle")
                         # turn until we can see a coloured objet
                         self.tw.angular.z=-0.2
