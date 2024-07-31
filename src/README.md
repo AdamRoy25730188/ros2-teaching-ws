@@ -37,4 +37,4 @@ From there the main node/program "colour_chaser" needs to be ran. To do so open 
 
 To begin the tidybot program. The opencv_bridge node can also be ran in order to get a perspective from the simulated limo bot:
 
-"ros2 launch my_pk opencv_bridge"
+"ros2 run my_pk opencv_bridge"
