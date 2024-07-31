@@ -22,9 +22,7 @@ setup(
         'console_scripts': [
             'm_node = my_pk.m_node:main',
             'opencv_bridge = my_pk.opencv_bridge:main',
-            'colour_chaser = my_pk.colour_chaser:main',
-            'colour_contours = my_pk.colour_contours:main',
-            'roamer = my_pk.roamer:main'
+            'colour_chaser = my_pk.colour_chaser:main'
         ],
     },
 )
