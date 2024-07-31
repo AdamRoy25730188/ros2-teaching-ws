@@ -119,7 +119,6 @@ class ColourChaser(Node):
                     cy = int(M['m01']/M['m00'])
                     
                     print("Centroid of the biggest area: ({}, {})".format(cx, cy))
-                    cv2.imshow("Image", current_frame)
 
                     if cy < 150:
     
