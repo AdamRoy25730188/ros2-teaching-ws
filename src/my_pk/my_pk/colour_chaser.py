@@ -25,7 +25,7 @@ class ColourChaser(Node):
     forward_speed = 0.2 # m/s, speed with which to go forward if the space is clear
     scan_segment = 60   # degrees, the size of the left and right laser segment to search for obstacles
     sanity = 0          # trackes how many times the bot has moved forward so that it may return (somewhat accurately) to its starting position
-    push = false        # used to make sure
+
 
     #initialise class
     def __init__(self):
