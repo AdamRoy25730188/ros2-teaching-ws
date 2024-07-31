@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+ #!/usr/bin/env python
 
 # An example of TurtleBot 3 subscribe to camera topic, mask colours, find and display contours, and move robot to center the object in image frame
 # Written for humble
@@ -24,6 +24,8 @@ class ColourChaser(Node):
     turn_speed = 0.2    # rad/s, turning speed in case of obstacle
     forward_speed = 0.2 # m/s, speed with which to go forward if the space is clear
     scan_segment = 60   # degrees, the size of the left and right laser segment to search for obstacles
+    sanity = 0          # trackes how many times the bot has moved forward so that it may return (somewhat accurately) to its starting position
+
 
     #initialise class
     def __init__(self):
@@ -49,6 +51,7 @@ class ColourChaser(Node):
         returns the smallest value in the range array.
         """
         # initialise as positive infinity
+        #this would be uses by the laser scanner, however the function that calls it has been disabled
         min_range = math.inf
         for v in range:
             if v < min_range:
@@ -65,6 +68,9 @@ class ColourChaser(Node):
         if the space is clear, it moves forward.
         """
         #This had to be cut out due to getting stuck once contacting the box
+        #This had been attempted to be made into a seperate node, it was intended to look over any boxes and set the robot to reverse as many times as it moved forward,
+        #so that it could push the next box form the center of the room however due to conflicts with camera _callback as well as
+        #Dificulties implimenting publication and subscription functions, the code was returned here
         '''
         # first, identify the nearest obstacle in the right 45 degree segment of the laser scanner
         min_range_right = self.min_range(data.ranges[:self.scan_segment])
@@ -83,18 +89,31 @@ class ColourChaser(Node):
         self.pub_cmd_vel.publish(twist)   
         '''
 
+    #utilised from the cmp3103m_ros2_code_fragments library
     def camera_callback(self, data):
         #self.get_logger().info("camera_callback")
 
         cv2.namedWindow("Image window", 1)
-
+        
         # Convert ROS Image message to OpenCV image
-        current_frame = self.br.imgmsg_to_cv2(data, desired_encoding='bgr8')
+        # frame = self.br.imgmsg_to_cv2(data, desired_encoding='bgr8')
+        frame = self.br.imgmsg_to_cv2(data, desired_encoding='bgr8')
+
+        # crop image to prevent tracking wall objects, code sampled from 
+        #https://stackoverflow.com/questions/65624795/how-to-ignore-a-image-region-for-contour-detection-opencv
+        #unfortuantly due to the find contours code, the tidybot will still register both of the coulourd sections of the wall as applicable for pushing 
+        #due to how low the contours allows it to reach
+        margin = 150
+        current_frame = frame[margin:frame.shape[0], :]
+        
         # Convert image to HSV
         current_frame_hsv = cv2.cvtColor(current_frame, cv2.COLOR_BGR2HSV)
         # Create mask for range of colours (HSV low values, HSV high values)
-        #current_frame_mask = cv2.inRange(current_frame_hsv,(70, 0, 50), (150, 255, 255))
-        current_frame_mask = cv2.inRange(current_frame_hsv,(0, 150, 50), (255, 255, 255)) # orange
+        # any hue (range: 0-255), but for something brightly
+        # colours (high saturation: > 150)
+        current_frame_mask = cv2.inRange(current_frame_hsv, 
+                                         np.array((0, 150, 0)), #low intensity
+                                         np.array((255, 255, 255))) #high intensity
 
         contours, hierarchy = cv2.findContours(current_frame_mask, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
 
@@ -114,36 +133,15 @@ class ColourChaser(Node):
                     # find the centroid of the contour
                     cx = int(M['m10']/M['m00'])
                     cy = int(M['m01']/M['m00'])
-                    '''
-                    following is unfinished attempt to usilise lidar
-                    '''
-                    '''
-                    start_index = max(0, -45)
-                    end_index = min(360, 45)
-
-                    xDistFromCentre = abs(400 - cx) / 400
-
-
-                    rayDepth = self.min_range(self.rays.ranges[start_index:end_index])
-
-                    if(rayDepth < cx):
-                        self.get_logger().warning("Wall is somehow in front of box!")
-                    if(rayDepth - cx < 0.2 + xDistFromCentre/8): #xDistFromCentre to account for distortion
-                        self.get_logger().info(f'Box at {cx}, {cy} against wall')
-                        continue
-                    self.get_logger().info(f'Box at {cx}, {cy} to be pushed')
-                    '''
-
+                    
                     print("Centroid of the biggest area: ({}, {})".format(cx, cy))
-
-                if cy < 250:
 
                     # Draw a circle centered at centroid coordinates
                     #cv2.circle(image, center_coordinates, radius, color, thickness) -1 px will fill the circle
                     cv2.circle(current_frame, (round(cx), round(cy)), 2, (0, 150, 0), -1)
-                            
+                                
                     # find height/width of robot camera image from ros2 topic echo /camera/image_raw height: 1080 width: 1920
-
+    
                     # if center of object is to the left of image center move left
                     if cx < data.width / 4:
                         self.tw.angular.z=0.2
@@ -151,19 +149,20 @@ class ColourChaser(Node):
                     elif cx >= 2 * data.width / 4:
                         self.tw.angular.z=-0.2
                     # else: center of object is in a 100 px range in the center of the image so dont turn
+                    else:    
                         print("object in the center of image")
                         self.tw.angular.z=0.0
-                        self.tw.linear.x=1.0
-
+                        self.tw.linear.x=0.5
+                
                 else:
                     print("entering idle")
                     # turn until we can see a coloured objet
-                    self.tw.angular.z=-0.2
+                    self.tw.angular.z=-0.3
 
         else:
             print("entering idle")
             #turn until we can see a coloured objet
-            self.tw.angular.z=-0.2
+            self.tw.angular.z=-0.3
 
         self.pub_cmd_vel.publish(self.tw)
 
@@ -172,6 +171,7 @@ class ColourChaser(Node):
         #cv2.imshow("Image window", current_frame_contours_small)
         #cv2.waitKey(1)
 
+#main section of the program, implimented to start the functions of this node
 def main(args=None):
     print('Starting colour_chaser.py.')
 
