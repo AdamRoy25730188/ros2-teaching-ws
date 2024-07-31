@@ -77,7 +77,7 @@ class OpencvBridge(Node):
         canny_img_small = cv2.resize(canny_img, (0,0), fx=1, fy=1) # reduce image size
         cv2.imshow("canny", canny_img_small)
 
-        cv_image_small = cv2.resize(cv_image, (0,0), fx=0.2, fy=0.2) # reduce image size
+        cv_image_small = cv2.resize(cv_image, (0,0), fx=1, fy=1) # reduce image size
         cv2.imshow("Image window", cv_image_small)
         cv2.waitKey(1)
 
