@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+ #!/usr/bin/env python
 
 # An example of TurtleBot 3 subscribe to camera topic, mask colours, find and display contours, and move robot to center the object in image frame
 # Written for humble
@@ -92,12 +92,12 @@ class ColourChaser(Node):
         
         # Convert ROS Image message to OpenCV image
         # frame = self.br.imgmsg_to_cv2(data, desired_encoding='bgr8')
-        current_ frame = self.br.imgmsg_to_cv2(data, desired_encoding='bgr8')
+        frame = self.br.imgmsg_to_cv2(data, desired_encoding='bgr8')
 
         # crop image to prevent tracking wall objects, code sampled from 
         #https://stackoverflow.com/questions/65624795/how-to-ignore-a-image-region-for-contour-detection-opencv
-        # margin = 150
-        # current_frame = frame[margin:frame.shape[0], :]
+        margin = 150
+        current_frame = frame[margin:frame.shape[0], :]
         
         # Convert image to HSV
         current_frame_hsv = cv2.cvtColor(current_frame, cv2.COLOR_BGR2HSV)
