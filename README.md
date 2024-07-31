@@ -27,6 +27,10 @@ Then the tidybot enviroment can be initialised in the novnc virtual enviroment. 
 
 "ros2 launch uol_tidybot tidybot.launch.py"
 
+And spawn green boxes to be pusshed using the given command:
+
+"ros2 run  uol_tidybot generate_objects --ros-args -p n_objects:=10"
+
 From there the main node/program "colour_chaser" needs to be ran. To do so open a new integrated terminal and use:
 
 "ros2 run my_pk colour_chaser"
