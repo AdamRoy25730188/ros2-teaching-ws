@@ -51,6 +51,7 @@ class ColourChaser(Node):
         returns the smallest value in the range array.
         """
         # initialise as positive infinity
+        #this would be uses by the laser scanner, however the function that calls it has been disabled
         min_range = math.inf
         for v in range:
             if v < min_range:
@@ -67,6 +68,9 @@ class ColourChaser(Node):
         if the space is clear, it moves forward.
         """
         #This had to be cut out due to getting stuck once contacting the box
+        #This had been attempted to be made into a seperate node, it was intended to look over any boxes and set the robot to reverse as many times as it moved forward,
+        #so that it could push the next box form the center of the room however due to conflicts with camera _callback as well as
+        #Dificulties implimenting publication and subscription functions, the code was returned here
         '''
         # first, identify the nearest obstacle in the right 45 degree segment of the laser scanner
         min_range_right = self.min_range(data.ranges[:self.scan_segment])
@@ -85,6 +89,7 @@ class ColourChaser(Node):
         self.pub_cmd_vel.publish(twist)   
         '''
 
+    #utilised from the cmp3103m_ros2_code_fragments library
     def camera_callback(self, data):
         #self.get_logger().info("camera_callback")
 
@@ -96,6 +101,8 @@ class ColourChaser(Node):
 
         # crop image to prevent tracking wall objects, code sampled from 
         #https://stackoverflow.com/questions/65624795/how-to-ignore-a-image-region-for-contour-detection-opencv
+        #unfortuantly due to the find contours code, the tidybot will still register both of the coulourd sections of the wall as applicable for pushing 
+        #due to how low the contours allows it to reach
         margin = 150
         current_frame = frame[margin:frame.shape[0], :]
         
@@ -164,6 +171,7 @@ class ColourChaser(Node):
         #cv2.imshow("Image window", current_frame_contours_small)
         #cv2.waitKey(1)
 
+#main section of the program, implimented to start the functions of this node
 def main(args=None):
     print('Starting colour_chaser.py.')
 
