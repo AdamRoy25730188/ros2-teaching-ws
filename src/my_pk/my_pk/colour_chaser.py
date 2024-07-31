@@ -96,8 +96,8 @@ class ColourChaser(Node):
         # any hue (range: 0-255), but for something brightly
         # colours (high saturation: > 150)
         current_frame_mask = cv2.inRange(current_frame_hsv, 
-                                         np.array((0, 150, 0)), 
-                                         np.array((255, 255, 255)))
+                                         np.array((0, 150, 0)), #low intensity
+                                         np.array((0, 255, 0))) #high intensity
 
         contours, hierarchy = cv2.findContours(current_frame_mask, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
 
