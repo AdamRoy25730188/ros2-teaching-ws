@@ -87,9 +87,15 @@ class ColourChaser(Node):
         #self.get_logger().info("camera_callback")
 
         cv2.namedWindow("Image window", 1)
-
+        
         # Convert ROS Image message to OpenCV image
-        current_frame = self.br.imgmsg_to_cv2(data, desired_encoding='bgr8')
+        frame = self.br.imgmsg_to_cv2(data, desired_encoding='bgr8')
+
+        # crop image to prevent tracking wall objects, code sampled from 
+        #https://stackoverflow.com/questions/65624795/how-to-ignore-a-image-region-for-contour-detection-opencv
+        margin = 150
+        current_frame = frame[margin:frame.shape[0], :]
+        
         # Convert image to HSV
         current_frame_hsv = cv2.cvtColor(current_frame, cv2.COLOR_BGR2HSV)
         # Create mask for range of colours (HSV low values, HSV high values)
@@ -97,7 +103,7 @@ class ColourChaser(Node):
         # colours (high saturation: > 150)
         current_frame_mask = cv2.inRange(current_frame_hsv, 
                                          np.array((0, 150, 0)), #low intensity
-                                         np.array((0, 255, 0))) #high intensity
+                                         np.array((255, 255, 255))) #high intensity
 
         contours, hierarchy = cv2.findContours(current_frame_mask, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
 
@@ -120,28 +126,23 @@ class ColourChaser(Node):
                     
                     print("Centroid of the biggest area: ({}, {})".format(cx, cy))
 
-                    if cy < 200:
-    
-                        # Draw a circle centered at centroid coordinates
-                        #cv2.circle(image, center_coordinates, radius, color, thickness) -1 px will fill the circle
-                        cv2.circle(current_frame, (round(cx), round(cy)), 2, (0, 150, 0), -1)
+                    # Draw a circle centered at centroid coordinates
+                    #cv2.circle(image, center_coordinates, radius, color, thickness) -1 px will fill the circle
+                    cv2.circle(current_frame, (round(cx), round(cy)), 2, (0, 150, 0), -1)
                                 
-                        # find height/width of robot camera image from ros2 topic echo /camera/image_raw height: 1080 width: 1920
+                    # find height/width of robot camera image from ros2 topic echo /camera/image_raw height: 1080 width: 1920
     
-                        # if center of object is to the left of image center move left
-                        if cx < data.width / 4:
-                            self.tw.angular.z=0.2
-                        # else if center of object is to the right of image center move right
-                        elif cx >= 2 * data.width / 4:
-                            self.tw.angular.z=-0.2
-                        # else: center of object is in a 100 px range in the center of the image so dont turn
-                            print("object in the center of image")
-                            self.tw.angular.z=0.0
-                            self.tw.linear.x=1.0
-                    else:
-                        print("entering idle")
-                        # turn until we can see a coloured objet
-                        self.tw.angular.z=-0.3
+                    # if center of object is to the left of image center move left
+                    if cx < data.width / 4:
+                        self.tw.angular.z=0.2
+                    # else if center of object is to the right of image center move right
+                    elif cx >= 2 * data.width / 4:
+                        self.tw.angular.z=-0.2
+                    # else: center of object is in a 100 px range in the center of the image so dont turn
+                    else:    
+                        print("object in the center of image")
+                        self.tw.angular.z=0.0
+                        self.tw.linear.x=1.0
                 
                 else:
                     print("entering idle")
