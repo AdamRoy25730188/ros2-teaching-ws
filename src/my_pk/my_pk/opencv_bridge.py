@@ -74,7 +74,7 @@ class OpencvBridge(Node):
         cv2.imshow("blur", blur_img_small)
 
         canny_img = cv2.Canny(gray_img, 10, 200)
-        canny_img_small = cv2.resize(canny_img, (0,0), fx=0.2, fy=0.2) # reduce image size
+        canny_img_small = cv2.resize(canny_img, (0,0), fx=1, fy=1) # reduce image size
         cv2.imshow("canny", canny_img_small)
 
         cv_image_small = cv2.resize(cv_image, (0,0), fx=0.2, fy=0.2) # reduce image size
