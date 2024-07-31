@@ -19,8 +19,7 @@ setup(
     license='Apache-2.0',
     tests_require=['pytest'],
     entry_points={
-        'console_scripts': [
-            'm_node = my_pk.m_node:main',
+        'console_scripts': [,
             'opencv_bridge = my_pk.opencv_bridge:main',
             'colour_chaser = my_pk.colour_chaser:main'
         ],
